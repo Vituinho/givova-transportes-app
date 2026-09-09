@@ -31,7 +31,7 @@ export default function HomeScreen() {
         <View style={styles.heroMark} />
         <BrandLogo inverse />
         <View style={styles.heroCopy}><Text style={styles.heroTitle}>Transporte que acompanha o ritmo do seu negócio.</Text><Text style={styles.heroText}>Cotação, atendimento e acompanhamento de carga no seu celular.</Text></View>
-        <View style={styles.heroActions}><Button label="Solicitar cotação" variant="outline" onPress={() => router.push('/(tabs)/quote')} /><Button label="Rastrear carga" variant="ghost" onPress={() => router.push('/(tabs)/track')} icon={<MapPinned size={19} color={colors.white} />} /></View>
+        <View style={styles.heroActions}><Button label="Solicitar cotação" variant="outline" onPress={() => router.push('/(tabs)/quote')} /><Button label="Rastrear carga" variant="ghost" inverted onPress={() => router.push('/(tabs)/track')} icon={<MapPinned size={19} color={colors.white} />} /></View>
       </View>
       <Section title="Acesso rápido"><View style={styles.quickGrid}>{quickActions.map(({ label, icon: Icon, action }) => <Pressable key={label} accessibilityRole="button" accessibilityLabel={label} onPress={action} style={({ pressed }) => [styles.quickAction, pressed && styles.pressed]}><View style={styles.quickIcon}><Icon size={22} color={colors.brandOrangeDark} /></View><Text style={styles.quickLabel}>{label}</Text></Pressable>)}</View></Section>
       <Card style={styles.trackingCard}>

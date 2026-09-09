@@ -11,11 +11,12 @@ type ButtonProps = PressableProps & {
   loading?: boolean;
   icon?: ReactNode;
   fullWidth?: boolean;
+  inverted?: boolean;
 };
 
-export function Button({ label, variant = 'primary', loading, icon, fullWidth = true, disabled, style, ...props }: ButtonProps) {
+export function Button({ label, variant = 'primary', loading, icon, fullWidth = true, inverted, disabled, style, ...props }: ButtonProps) {
   const isDisabled = disabled || loading;
-  const foreground = variant === 'primary' ? colors.white : variant === 'secondary' ? colors.brandOrangeDark : colors.textPrimary;
+  const foreground = inverted || variant === 'primary' ? colors.white : variant === 'secondary' ? colors.brandOrangeDark : colors.textPrimary;
 
   return (
     <Pressable

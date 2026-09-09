@@ -1,7 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { colors } from '@/constants/theme';
+import { colors, typography } from '@/constants/theme';
 
 type SectionProps = PropsWithChildren<{ title: string; eyebrow?: string; action?: ReactNode; description?: string }>;
 
@@ -26,6 +26,6 @@ const styles = StyleSheet.create({
   headingRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 },
   headingCopy: { flex: 1, gap: 4 },
   eyebrow: { color: colors.brandOrangeDark, fontSize: 12, fontWeight: '800', letterSpacing: 1.2, textTransform: 'uppercase' },
-  title: { color: colors.textPrimary, fontSize: 22, fontWeight: '800', letterSpacing: -0.3 },
-  description: { color: colors.textSecondary, fontSize: 14, lineHeight: 20 },
+  title: { color: colors.textPrimary, ...typography.section },
+  description: { color: colors.textSecondary, ...typography.small },
 });

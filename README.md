@@ -89,8 +89,8 @@ UI, validação, regras de negócio e acesso à API não ficam acoplados. Uma á
 ## Telas
 
 - Splash provisória e navegação inferior
-- Início com hero, atalhos, rastreamento rápido, soluções e relações institucionais
-- Cotação em cinco etapas: rota, carga, cliente, observações e confirmação
+- Início orientado a tarefas, com rastreamento e cotação em destaque, atalhos e conteúdo institucional discreto
+- Cotação em quatro etapas: rota, carga, contato e revisão
 - Rastreamento preparado para status, rota, datas e timeline reais
 - Serviços e detalhe de cada solução
 - Mais, Sobre, Clientes e parceiros, Contato, Configurações e Sobre o aplicativo

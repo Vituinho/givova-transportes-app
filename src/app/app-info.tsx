@@ -8,7 +8,7 @@ import { Screen } from '@/components/ui/Screen';
 import { colors, radius } from '@/constants/theme';
 
 export default function AppInfoScreen() {
-  return <Screen><Header title="Sobre o aplicativo" back /><View style={styles.hero}><View style={styles.logo}><BrandLogo /></View><Text style={styles.title}>Givova Transportes</Text><Text style={styles.version}>Versão {Constants.expoConfig?.version ?? '1.0.0'}</Text></View><View style={styles.content}><View style={styles.row}><Smartphone size={22} color={colors.brandOrange} /><View style={styles.copy}><Text style={styles.heading}>Produto mobile nativo</Text><Text style={styles.text}>Construído com React Native e Expo, com experiência própria para Android e compatibilidade planejada para iOS.</Text></View></View><Text style={styles.note}>© {new Date().getFullYear()} Givova Transportes. Informações legais e de copyright devem ser confirmadas antes da publicação.</Text></View></Screen>;
+  return <Screen><Header title="Sobre o aplicativo" back /><View style={styles.hero}><View style={styles.logo}><BrandLogo /></View><Text style={styles.title}>Givova Transportes</Text><Text style={styles.version}>Versão {Constants.expoConfig?.version ?? '1.0.0'}</Text></View><View style={styles.content}><View style={styles.row}><Smartphone size={22} color={colors.brandOrange} /><View style={styles.copy}><Text style={styles.heading}>Produto mobile multiplataforma</Text><Text style={styles.text}>Construído com React Native e Expo para oferecer uma experiência consistente em Android e iOS.</Text></View></View><Text style={styles.note}>© {new Date().getFullYear()} Givova Transportes. Informações legais e de copyright devem ser confirmadas antes da publicação.</Text></View></Screen>;
 }
 
 const styles = StyleSheet.create({

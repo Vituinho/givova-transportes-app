@@ -2,7 +2,7 @@ import type { PropsWithChildren } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, type ScrollViewProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { colors } from '@/constants/theme';
+import { colors, layout } from '@/constants/theme';
 
 type ScreenProps = PropsWithChildren<{
   scroll?: boolean;
@@ -28,5 +28,5 @@ export function Screen({ children, scroll = true, keyboard, contentContainerStyl
 
 const styles = StyleSheet.create({
   fill: { flex: 1 },
-  content: { paddingHorizontal: 20, paddingTop: 12, paddingBottom: 112, gap: 24, backgroundColor: colors.background },
+  content: { paddingHorizontal: layout.containerPadding, paddingTop: layout.screenTop, paddingBottom: layout.screenBottom, gap: layout.sectionGap, backgroundColor: colors.background },
 });

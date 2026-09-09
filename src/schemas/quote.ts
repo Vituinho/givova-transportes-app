@@ -28,6 +28,5 @@ export const quoteStepFields: (keyof QuoteFormData)[][] = [
   ['originCity', 'originState', 'destinationCity', 'destinationState'],
   ['cargoType', 'weight', 'volumes', 'dimensions', 'invoiceValue', 'collectionDate'],
   ['name', 'company', 'email', 'phone', 'whatsapp'],
-  ['notes'],
-  ['acceptPrivacy'],
+  ['notes', 'acceptPrivacy'],
 ];

@@ -39,6 +39,21 @@ npm run ios
 
 O Expo Go pode servir para verificações rápidas, mas development builds são recomendadas para validar recursos nativos e notificações.
 
+### Teste gratuito em um iPhone
+
+Não é necessário pagar nem possuir um Mac para testar as telas e os fluxos principais em um iPhone físico:
+
+1. instale o **Expo Go** pela App Store;
+2. conecte o iPhone e o computador à mesma rede Wi-Fi;
+3. inicie o projeto com `npx expo start --go`;
+4. leia o QR Code com a câmera do iPhone.
+
+Se a rede local não permitir a conexão, use `npx expo start --go --tunnel`.
+
+O Expo Go permite testar navegação, layout, cotação, validações, serviços e o estado de integração do rastreamento. Notificações push remotas, ícone/splash instalados e uma build independente exigem uma development build assinada. A assinatura e a publicação oficial para iPhone dependem do Apple Developer Program; essa exigência é da Apple, não da tecnologia utilizada no projeto.
+
+O código-fonte permanece único para iOS e Android. Ajustes específicos ficam centralizados em `app.json` e nos recursos nativos do Expo, evitando manter dois aplicativos separados.
+
 ## Variáveis de ambiente
 
 Copie `.env.example` para `.env`. Nunca inclua segredos em variáveis `EXPO_PUBLIC_*`, pois elas ficam visíveis no bundle.

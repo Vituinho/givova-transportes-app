@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "Givova Transportes",
+    "slug": "givova-transportes",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/brand/icon-placeholder.png",
+    "scheme": "givovatransportes",
+    "userInterfaceStyle": "light",
+    "primaryColor": "#F36F21",
+    "ios": {
+      "bundleIdentifier": "br.com.givovatransportes.app",
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "br.com.givovatransportes.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#F36F21",
+        "foregroundImage": "./assets/brand/adaptive-icon-placeholder.png"
+      },
+      "predictiveBackGestureEnabled": true
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/brand/favicon-placeholder.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-notifications",
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#F36F21",
+          "image": "./assets/brand/splash-placeholder.png",
+          "imageWidth": 180,
+          "resizeMode": "contain"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

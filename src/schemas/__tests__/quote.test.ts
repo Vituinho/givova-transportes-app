@@ -7,6 +7,9 @@ const validQuote = {
 
 describe('quoteSchema', () => {
   it('aceita uma solicitação completa', () => { expect(quoteSchema.safeParse(validQuote).success).toBe(true); });
+  it('aceita dimensões e WhatsApp em branco', () => {
+    expect(quoteSchema.safeParse({ ...validQuote, dimensions: '', whatsapp: '' }).success).toBe(true);
+  });
   it('exige consentimento de privacidade', () => {
     const result = quoteSchema.safeParse({ ...validQuote, acceptPrivacy: false });
     expect(result.success).toBe(false);

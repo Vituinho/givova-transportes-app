@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { colors, radius } from '@/constants/theme';
+import { colors, fonts, radius } from '@/constants/theme';
 
 export function Badge({ label, tone = 'orange' }: { label: string; tone?: 'orange' | 'success' | 'neutral' }) {
   const toneStyle = tone === 'success' ? styles.success : tone === 'neutral' ? styles.neutral : styles.orange;
@@ -11,6 +11,6 @@ const styles = StyleSheet.create({
   orange: { backgroundColor: colors.mutedOrange },
   success: { backgroundColor: colors.mutedSuccess },
   neutral: { backgroundColor: colors.background },
-  label: { color: colors.brandOrangeDark, fontSize: 12, fontWeight: '700' },
+  label: { color: colors.brandOrangeDark, fontSize: 12, fontFamily: fonts.semibold },
   successText: { color: colors.success },
 });

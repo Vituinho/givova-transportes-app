@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Card } from '@/components/ui/Card';
 import { Header } from '@/components/ui/Header';
 import { Screen } from '@/components/ui/Screen';
-import { colors } from '@/constants/theme';
+import { colors, typography } from '@/constants/theme';
 
 export default function LegalScreen() {
   const { document } = useLocalSearchParams<{ document: string }>();
@@ -15,5 +15,5 @@ export default function LegalScreen() {
 }
 
 const styles = StyleSheet.create({
-  warning: { backgroundColor: '#FFF8E7', borderColor: '#F0D08A', flexDirection: 'row', gap: 12 }, icon: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#FFE9B1', alignItems: 'center', justifyContent: 'center' }, copy: { flex: 1 }, warningTitle: { color: colors.warning, fontSize: 15, fontWeight: '800' }, warningText: { color: colors.textSecondary, fontSize: 13, lineHeight: 19, marginTop: 4 }, content: { gap: 12 }, heading: { color: colors.textPrimary, fontSize: 21, fontWeight: '800' }, paragraph: { color: colors.textSecondary, fontSize: 15, lineHeight: 23 },
+  warning: { backgroundColor: '#FFF8E7', borderColor: '#F0D08A', flexDirection: 'row', gap: 12 }, icon: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#FFE9B1', alignItems: 'center', justifyContent: 'center' }, copy: { flex: 1 }, warningTitle: { color: colors.warning, ...typography.title }, warningText: { color: colors.textSecondary, ...typography.bodySmall, marginTop: 4 }, content: { gap: 12 }, heading: { color: colors.textPrimary, ...typography.h2 }, paragraph: { color: colors.textSecondary, ...typography.body },
 });

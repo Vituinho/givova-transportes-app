@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, type TextInputProps } from 'react-native';
 
-import { colors, controls, radius } from '@/constants/theme';
+import { colors, controls, fonts, radius } from '@/constants/theme';
 
 type InputProps = TextInputProps & {
   label: string;
@@ -33,13 +33,13 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({ label, e
 
 const styles = StyleSheet.create({
   wrapper: { gap: 7 },
-  label: { color: colors.textPrimary, fontSize: 14, fontWeight: '600' },
-  input: { minHeight: controls.inputHeight, borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: 15, backgroundColor: colors.white, color: colors.textPrimary, fontSize: 16 },
+  label: { color: colors.textPrimary, fontSize: 13, fontFamily: fonts.semibold },
+  input: { minHeight: controls.inputHeight, borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: 15, backgroundColor: colors.white, color: colors.textPrimary, fontFamily: fonts.regular, fontSize: 16 },
   inputFilled: { borderColor: colors.borderStrong },
   inputFocused: { borderColor: colors.brandOrange, borderWidth: 2, paddingHorizontal: 14 },
   inputDisabled: { backgroundColor: '#EFEBE7', color: colors.textMuted },
   multiline: { minHeight: 116, paddingTop: 14, textAlignVertical: 'top' },
   inputError: { borderColor: colors.error },
-  error: { color: colors.error, fontSize: 13 },
-  hint: { color: colors.textSecondary, fontSize: 13 },
+  error: { color: colors.error, fontFamily: fonts.regular, fontSize: 12 },
+  hint: { color: colors.textSecondary, fontFamily: fonts.regular, fontSize: 12 },
 });

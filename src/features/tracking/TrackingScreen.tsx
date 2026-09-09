@@ -1,39 +1,80 @@
 import { useLocalSearchParams } from 'expo-router';
-import { Check, Clock3, MapPin, PackageSearch, Route, Search } from 'lucide-react-native';
+import { Check, ChevronRight, PackageSearch } from 'lucide-react-native';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Badge } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
+import { TrackingSearch } from '@/components/TrackingSearch';
 import { Header } from '@/components/ui/Header';
-import { Input } from '@/components/ui/Input';
 import { Screen } from '@/components/ui/Screen';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
-import { colors, iconSizes, radius, typography } from '@/constants/theme';
+import { colors, fonts, typography } from '@/constants/theme';
 import { useTracking } from '@/hooks/useTracking';
 import { trackingCodeSchema, type TrackingResult } from '@/schemas/tracking';
 import { getUserMessage, IntegrationUnavailableError } from '@/services/api';
 
-function TrackingDetails({ result }: { result: TrackingResult }) {
+const developmentPreview: TrackingResult = {
+  code: 'GIV-284731',
+  status: 'Em trânsito',
+  origin: 'São Paulo, SP',
+  destination: 'Curitiba, PR',
+  lastUpdatedAt: '2026-09-09T14:35:00.000Z',
+  estimatedDeliveryAt: '2026-09-11T18:00:00.000Z',
+  events: [
+    { id: 'preview-1', label: 'Coleta realizada', description: 'Carga recebida para transporte.', occurredAt: '2026-09-08T12:20:00.000Z', completed: true },
+    { id: 'preview-2', label: 'Em trânsito', description: 'Carga seguindo para a unidade de destino.', occurredAt: '2026-09-09T14:35:00.000Z', completed: false },
+    { id: 'preview-3', label: 'Unidade de destino', occurredAt: '2026-09-10T14:35:00.000Z', completed: false },
+    { id: 'preview-4', label: 'Saiu para entrega', occurredAt: '2026-09-11T12:00:00.000Z', completed: false },
+    { id: 'preview-5', label: 'Entregue', occurredAt: '2026-09-11T18:00:00.000Z', completed: false },
+  ],
+};
+
+function TrackingDetails({ result, preview }: { result: TrackingResult; preview?: boolean }) {
+  const currentIndex = Math.max(0, result.events.findIndex((event) => !event.completed));
   return (
     <View style={styles.result}>
-      <Card style={styles.summary}>
-        <View style={styles.summaryTop}><Badge label={result.status} tone="success" /><Text style={styles.code}>{result.code}</Text></View>
-        <View style={styles.routeRow}><View style={styles.routePoint}><MapPin size={18} color={colors.brandOrange} /><Text style={styles.routeLabel}>Origem</Text><Text style={styles.routeValue}>{result.origin || 'Não informada'}</Text></View><Route size={20} color={colors.textSecondary} /><View style={styles.routePoint}><MapPin size={18} color={colors.brandOrangeDark} /><Text style={styles.routeLabel}>Destino</Text><Text style={styles.routeValue}>{result.destination || 'Não informado'}</Text></View></View>
-        <View style={styles.dates}><Text style={styles.meta}>Atualizado: {new Date(result.lastUpdatedAt).toLocaleString('pt-BR')}</Text>{result.estimatedDeliveryAt ? <Text style={styles.meta}>Previsão: {new Date(result.estimatedDeliveryAt).toLocaleDateString('pt-BR')}</Text> : null}</View>
-      </Card>
-      <Text style={styles.timelineTitle}>Histórico da carga</Text>
-      {result.events.map((event, index) => <View key={event.id} style={styles.event}><View style={styles.timelineRail}>{index < result.events.length - 1 ? <View style={[styles.line, event.completed && styles.lineComplete]} /> : null}<View style={[styles.dot, event.completed && styles.dotComplete]}>{event.completed ? <Check size={14} color={colors.white} /> : <Clock3 size={13} color={colors.textSecondary} />}</View></View><View style={styles.eventCopy}><Text style={styles.eventLabel}>{event.label}</Text>{event.description ? <Text style={styles.eventDescription}>{event.description}</Text> : null}<Text style={styles.eventDate}>{new Date(event.occurredAt).toLocaleString('pt-BR')}</Text></View></View>)}
+      {preview ? <Text style={styles.preview}>Prévia de desenvolvimento</Text> : null}
+      <View style={styles.shipment}>
+        <View style={styles.statusRow}><Text style={styles.status}>{result.status}</Text><Text selectable style={styles.code}>{result.code}</Text></View>
+        <View style={styles.route}>
+          <View style={styles.routePoint}><Text style={styles.metaLabel}>Origem</Text><Text style={styles.routeValue}>{result.origin || 'Não informada'}</Text></View>
+          <ChevronRight size={22} color={colors.textMuted} />
+          <View style={[styles.routePoint, styles.destination]}><Text style={styles.metaLabel}>Destino</Text><Text style={styles.routeValue}>{result.destination || 'Não informado'}</Text></View>
+        </View>
+        {result.estimatedDeliveryAt ? <View style={styles.estimate}><Text style={styles.metaLabel}>Previsão</Text><Text style={styles.estimateValue}>{new Date(result.estimatedDeliveryAt).toLocaleDateString('pt-BR')}</Text></View> : null}
+      </View>
+
+      <View style={styles.timelineSection}>
+        <Text style={styles.sectionLabel}>Acompanhamento</Text>
+        {result.events.map((event, index) => {
+          const current = index === currentIndex;
+          const complete = event.completed;
+          return (
+            <View key={event.id} style={styles.event}>
+              <View style={styles.rail}>
+                {index < result.events.length - 1 ? <View style={[styles.line, (complete || current) && styles.lineActive]} /> : null}
+                <View style={[styles.dot, complete && styles.dotComplete, current && styles.dotCurrent]}>{complete ? <Check size={10} color={colors.white} strokeWidth={3} /> : null}</View>
+              </View>
+              <View style={styles.eventCopy}>
+                <Text style={[styles.eventTitle, !complete && !current && styles.eventFuture, current && styles.eventCurrent]}>{event.label}</Text>
+                {event.description && (complete || current) ? <Text style={styles.eventDescription}>{event.description}</Text> : null}
+                {(complete || current) ? <Text style={styles.eventDate}>{new Date(event.occurredAt).toLocaleString('pt-BR')}</Text> : null}
+              </View>
+            </View>
+          );
+        })}
+      </View>
+
+      <View style={styles.updated}><Text style={styles.metaLabel}>Última atualização</Text><Text style={styles.updatedValue}>{new Date(result.lastUpdatedAt).toLocaleString('pt-BR')}</Text></View>
     </View>
   );
 }
 
 export default function TrackingScreen() {
-  const params = useLocalSearchParams<{ code?: string }>();
+  const params = useLocalSearchParams<{ code?: string; preview?: string }>();
   const [code, setCode] = useState(params.code ?? '');
   const [validationError, setValidationError] = useState('');
   const tracking = useTracking();
+  const preview = __DEV__ && params.preview === 'true';
 
   const submit = () => {
     const parsed = trackingCodeSchema.safeParse(code);
@@ -43,23 +84,54 @@ export default function TrackingScreen() {
   };
 
   const integrationPending = tracking.error instanceof IntegrationUnavailableError;
+  const result = preview ? developmentPreview : tracking.data;
 
   return (
-    <Screen keyboard>
-      <Header title="Rastrear carga" subtitle="Acompanhe a sua operação" />
-      <View style={styles.intro}><View style={styles.introIcon}><PackageSearch size={iconSizes.large} color={colors.brandOrangeDark} /></View><View style={styles.introCopy}><Text style={styles.title}>Rastreie sua carga</Text><Text style={styles.description}>Use o código informado pela Givova.</Text></View></View>
-      <View style={styles.search}><Input label="Código de rastreamento" placeholder="Digite o código" autoCapitalize="characters" autoCorrect={false} returnKeyType="search" value={code} onChangeText={setCode} onSubmitEditing={submit} error={validationError} /><Button label="Rastrear" onPress={submit} loading={tracking.isPending} icon={<Search size={19} color={colors.white} />} /></View>
-      {tracking.isPending ? <LoadingState title="Consultando sua carga" /> : tracking.data ? <TrackingDetails result={tracking.data} /> : integrationPending ? <EmptyState title="Rastreamento online em integração" description="A consulta será habilitada assim que a API oficial da Givova estiver conectada. Nenhum status simulado é exibido." icon={PackageSearch} /> : tracking.isError ? <ErrorState title="Não foi possível rastrear" description={getUserMessage(tracking.error)} actionLabel="Tentar novamente" onAction={submit} /> : <View style={styles.guarantee}><Text style={styles.guaranteeTitle}>Informação confiável</Text><Text style={styles.guaranteeText}>Este aplicativo mostra somente dados recebidos do sistema oficial. Não criamos etapas ou previsões fictícias.</Text></View>}
+    <Screen keyboard contentContainerStyle={styles.screen}>
+      <Header title="Rastrear carga" />
+      {!result ? <View style={styles.intro}><Text style={styles.title}>Consulte o andamento da sua operação.</Text><Text style={styles.description}>Informe o código da carga ou documento recebido da Givova.</Text></View> : null}
+      {!result ? <TrackingSearch code={code} onChangeCode={setCode} onSubmit={submit} error={validationError} loading={tracking.isPending} /> : null}
+      {tracking.isPending ? <LoadingState title="Consultando sua carga" /> : result ? <TrackingDetails result={result} preview={preview} /> : integrationPending ? <EmptyState title="Rastreamento em integração" description="A consulta será habilitada quando a API oficial estiver conectada. Nenhum status simulado é exibido." icon={PackageSearch} /> : tracking.isError ? <ErrorState title="Não foi possível rastrear" description={getUserMessage(tracking.error)} actionLabel="Tentar novamente" onAction={submit} /> : <View style={styles.trust}><Text style={styles.trustTitle}>Dados oficiais</Text><Text style={styles.trustText}>O aplicativo não cria etapas ou previsões. Você verá somente informações recebidas da operação.</Text></View>}
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  intro: { flexDirection: 'row', alignItems: 'center', gap: 13 },
-  introIcon: { width: 48, height: 48, borderRadius: radius.md, backgroundColor: colors.mutedOrange, alignItems: 'center', justifyContent: 'center' },
-  introCopy: { flex: 1, gap: 2 },
-  title: { color: colors.textPrimary, ...typography.heading },
-  description: { color: colors.textSecondary, ...typography.body },
-  search: { gap: 14 },
-  guarantee: { borderLeftWidth: 3, borderLeftColor: colors.brandOrange, paddingLeft: 15, gap: 4 }, guaranteeTitle: { color: colors.textPrimary, fontWeight: '800', fontSize: 15 }, guaranteeText: { color: colors.textSecondary, fontSize: 13, lineHeight: 19 }, result: { gap: 18 }, summary: { gap: 18 }, summaryTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 10 }, code: { color: colors.textSecondary, fontSize: 12, fontWeight: '700' }, routeRow: { flexDirection: 'row', alignItems: 'center', gap: 8 }, routePoint: { flex: 1, gap: 3 }, routeLabel: { color: colors.textSecondary, fontSize: 11 }, routeValue: { color: colors.textPrimary, fontWeight: '700', fontSize: 14 }, dates: { gap: 4 }, meta: { color: colors.textSecondary, fontSize: 12 }, timelineTitle: { color: colors.textPrimary, fontSize: 19, fontWeight: '800' }, event: { flexDirection: 'row', gap: 13, minHeight: 82 }, timelineRail: { width: 28, alignItems: 'center' }, line: { position: 'absolute', top: 28, width: 2, height: 58, backgroundColor: colors.border }, lineComplete: { backgroundColor: colors.brandOrange }, dot: { width: 28, height: 28, borderRadius: 14, borderWidth: 2, borderColor: colors.border, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center' }, dotComplete: { backgroundColor: colors.brandOrange, borderColor: colors.brandOrange }, eventCopy: { flex: 1, paddingBottom: 14 }, eventLabel: { color: colors.textPrimary, fontWeight: '700', fontSize: 15 }, eventDescription: { color: colors.textSecondary, fontSize: 13, lineHeight: 18, marginTop: 3 }, eventDate: { color: colors.textSecondary, fontSize: 11, marginTop: 5 },
+  screen: { gap: 28 },
+  intro: { gap: 8, paddingTop: 10 },
+  title: { color: colors.textPrimary, ...typography.h1, maxWidth: 340 },
+  description: { color: colors.textSecondary, ...typography.body, maxWidth: 350 },
+  trust: { borderTopWidth: 1, borderColor: colors.border, paddingTop: 18, gap: 5 },
+  trustTitle: { color: colors.textPrimary, ...typography.title },
+  trustText: { color: colors.textSecondary, ...typography.bodySmall },
+  result: { gap: 30 },
+  preview: { alignSelf: 'flex-start', color: colors.warning, fontFamily: fonts.semibold, fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.8 },
+  shipment: { backgroundColor: colors.backgroundSecondary, padding: 18, borderRadius: 12, gap: 22 },
+  statusRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
+  status: { color: colors.brandOrangeDark, fontFamily: fonts.bold, fontSize: 13, textTransform: 'uppercase', letterSpacing: 0.8 },
+  code: { color: colors.textPrimary, fontFamily: fonts.semibold, fontSize: 13 },
+  route: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  routePoint: { flex: 1, gap: 4 },
+  destination: { alignItems: 'flex-end' },
+  metaLabel: { color: colors.textMuted, ...typography.caption, textTransform: 'uppercase', letterSpacing: 0.7 },
+  routeValue: { color: colors.textPrimary, fontFamily: fonts.semibold, fontSize: 15, lineHeight: 21 },
+  estimate: { borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 14, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  estimateValue: { color: colors.textPrimary, fontFamily: fonts.bold, fontSize: 15 },
+  timelineSection: { gap: 4 },
+  sectionLabel: { color: colors.textPrimary, fontFamily: fonts.bold, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 15 },
+  event: { flexDirection: 'row', minHeight: 72, gap: 14 },
+  rail: { width: 20, alignItems: 'center' },
+  line: { position: 'absolute', top: 17, width: 2, bottom: -2, backgroundColor: colors.border },
+  lineActive: { backgroundColor: '#F2B08B' },
+  dot: { width: 14, height: 14, borderRadius: 7, borderWidth: 2, borderColor: colors.borderStrong, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' },
+  dotComplete: { backgroundColor: colors.brandOrange, borderColor: colors.brandOrange },
+  dotCurrent: { borderWidth: 4, borderColor: colors.brandOrange, backgroundColor: colors.white },
+  eventCopy: { flex: 1, paddingBottom: 16 },
+  eventTitle: { color: colors.textPrimary, ...typography.title },
+  eventCurrent: { color: colors.brandOrangeDark },
+  eventFuture: { color: colors.textMuted, fontFamily: fonts.medium },
+  eventDescription: { color: colors.textSecondary, ...typography.bodySmall, marginTop: 3 },
+  eventDate: { color: colors.textMuted, ...typography.caption, marginTop: 5 },
+  updated: { borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 17, gap: 5 },
+  updatedValue: { color: colors.textPrimary, ...typography.bodySmall },
 });

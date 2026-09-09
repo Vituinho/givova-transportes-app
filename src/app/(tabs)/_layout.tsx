@@ -1,8 +1,8 @@
 import { Tabs } from 'expo-router';
-import { Home, MapPinned, Menu, PackagePlus, Truck } from 'lucide-react-native';
-import { StyleSheet, View } from 'react-native';
+import { Home, MapPinned, Menu, PackagePlus } from 'lucide-react-native';
+import { StyleSheet } from 'react-native';
 
-import { colors, shadow } from '@/constants/theme';
+import { colors, fonts } from '@/constants/theme';
 
 export default function TabsLayout() {
   return (
@@ -15,17 +15,15 @@ export default function TabsLayout() {
       tabBarHideOnKeyboard: true,
     }}>
       <Tabs.Screen name="index" options={{ title: 'Início', tabBarIcon: ({ color, size }) => <Home color={color} size={size} /> }} />
-      <Tabs.Screen name="quote" options={{ title: 'Cotação', tabBarIcon: ({ color, size }) => <PackagePlus color={color} size={size} /> }} />
-      <Tabs.Screen name="track" options={{ title: 'Rastrear', tabBarIcon: ({ focused }) => <View style={[styles.trackIcon, focused && styles.trackIconActive]}><MapPinned color={focused ? colors.white : colors.textSecondary} size={23} /></View> }} />
-      <Tabs.Screen name="services" options={{ title: 'Serviços', tabBarIcon: ({ color, size }) => <Truck color={color} size={size} /> }} />
+      <Tabs.Screen name="track" options={{ title: 'Rastrear', tabBarIcon: ({ color, size }) => <MapPinned color={color} size={size} strokeWidth={2.2} /> }} />
+      <Tabs.Screen name="quote" options={{ title: 'Cotação', tabBarIcon: ({ color, size }) => <PackagePlus color={color} size={size} strokeWidth={2.2} /> }} />
       <Tabs.Screen name="more" options={{ title: 'Mais', tabBarIcon: ({ color, size }) => <Menu color={color} size={size} /> }} />
+      <Tabs.Screen name="services" options={{ href: null }} />
     </Tabs>
   );
 }
 
 const styles = StyleSheet.create({
-  bar: { height: 72, paddingTop: 7, paddingBottom: 8, backgroundColor: colors.white, borderTopColor: colors.border, ...shadow },
-  label: { fontSize: 11, fontWeight: '600' },
-  trackIcon: { width: 38, height: 34, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
-  trackIconActive: { backgroundColor: colors.brandOrange },
+  bar: { height: 68, paddingTop: 7, paddingBottom: 7, backgroundColor: colors.white, borderTopColor: colors.border, borderTopWidth: StyleSheet.hairlineWidth },
+  label: { fontSize: 11, fontFamily: fonts.medium },
 });

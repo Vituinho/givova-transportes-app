@@ -6,6 +6,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
+    "@expo-google-fonts/inter": "^0.4.2",
     "@hookform/resolvers": "^5.9.1",
     "@react-native-community/netinfo": "^12.0.1",
     "@tanstack/react-query": "^5.102.8",
@@ -13,6 +14,7 @@
     "expo-constants": "~57.0.17",
     "expo-dev-client": "~57.0.18",
     "expo-device": "~57.0.1",
+    "expo-font": "~57.0.3",
     "expo-linking": "~57.0.9",
     "expo-notifications": "~57.0.17",
     "expo-router": "~57.0.20",

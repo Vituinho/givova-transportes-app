@@ -1,7 +1,7 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text, type PressableProps } from 'react-native';
 import type { ReactNode } from 'react';
 
-import { colors, controls, radius } from '@/constants/theme';
+import { colors, controls, radius, typography } from '@/constants/theme';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   outline: { backgroundColor: colors.white, borderWidth: 1, borderColor: colors.border },
   ghost: { backgroundColor: 'transparent' },
   danger: { backgroundColor: colors.error },
-  label: { fontSize: 15, fontWeight: '700', letterSpacing: 0.2 },
+  label: { ...typography.button },
   disabled: { backgroundColor: '#EFEBE7', borderColor: colors.border },
   pressed: { opacity: 0.82, transform: [{ scale: 0.99 }] },
 });
